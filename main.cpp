@@ -18,11 +18,7 @@ int main()
 
         if (choice < 1 || choice > 6)
         {
-            cout << "Invalid Choice! Enter choice between 1-6." << endl;
-            cout << "----------------------------------------" << endl;
-            cout << endl;
-
-            waitForEnter();
+            errorMessage("Invalid Choice! Enter choice (1-6)");
         }
         
         else
@@ -30,12 +26,13 @@ int main()
             switch (choice)
             {
             case 1:
+                clearScreen();
                 viewPackages();
                 waitForEnter();
                 break;
 
             case 2:
-                cout << "two" << endl;
+                bookPackage();
                 waitForEnter();
                 break;
 
