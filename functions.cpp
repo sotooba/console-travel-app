@@ -20,6 +20,18 @@ void printHeader(string prompt)
 }
 
 
+void printMenu()
+{
+    cout << "1. View Travel Packages" << endl;
+    cout << "2. Book a Travel Package" << endl;
+    cout << "3. View Bookings" << endl;
+    cout << "4. Edit a Booking" << endl;
+    cout << "5. Delete a Booking" << endl;
+    cout << "6. Exit" << endl;
+    cout << "----------------------------------------" << endl;
+}
+
+
 void waitForEnter()
 {
     cout << "Press Enter key to continue: ";

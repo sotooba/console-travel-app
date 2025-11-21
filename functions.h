@@ -8,6 +8,8 @@ void clearScreen();
 
 void printHeader(string prompt);
 
+void printMenu();
+
 void waitForEnter();
 
 void viewPackages();
