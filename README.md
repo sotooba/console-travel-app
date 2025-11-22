@@ -1,2 +1,91 @@
-# console-travel-app
-Travel and Tourism Management system built in C++ (console-based).
+# 🌍 Travel Management System (Procedural C++)
+
+A menu-driven console application written in **procedural C++** that allows users to manage travel packages and customer bookings using **functions, structs, arrays, and file handling**.
+
+---
+
+## Project Objective
+This project aims to create a **Travel Management System** that enables users to:
+
+- View travel packages  
+- Book a travel package  
+- View all bookings  
+- Edit an existing booking  
+- Delete a booking  
+- Save and load data from text files  
+- Use a fully procedural (non-OOP) C++ approach  
+
+---
+
+## Project Structure
+/console-travel-app
+│
+├── main.cpp
+├── functions.cpp
+├── functions.h
+└── bookings.txt
+
+`bookings.txt` is automatically created if it does not exist.
+
+---
+
+## Core Features
+
+### View Travel Packages
+Shows available travel destinations and prices per person.
+
+### Book a Package
+- Enter customer name  
+- Enter phone number  
+- Choose a destination  
+- Specify number of travelers  
+- Total cost is automatically calculated  
+- Booking ID is auto-generated  
+- Record is saved to file  
+
+### View All Bookings
+Displays all stored bookings from memory.
+
+### Edit a Booking
+Allows editing of:
+- Name  
+- Phone  
+- Destination  
+- Number of travelers  
+
+Cost is recalculated when needed.
+
+### Delete a Booking
+Deletes a booking by ID and updates the file.
+
+### Exit Program
+Safely terminates the system.
+
+---
+
+## File Format (bookings.txt)
+
+Each booking record is stored on one line:
+
+---
+
+## How to Compile & Run
+
+### Using g++:
+g++ main.cpp functions.cpp -o app.exe
+./app.exe
+
+### Using CodeBlocks / Dev-C++:
+1. Create new project  
+2. Add all `.cpp` files  
+3. Build and run  
+
+---
+
+## Future Enhancements
+- Add searching or sorting options  
+- Add discount or promo system  
+- Migrate from text file to database (SQLite/MySQL) 
+- Add admin authentication  
+
+---
