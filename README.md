@@ -18,7 +18,7 @@ This project aims to create a **Travel Management System** that enables users to
 ---
 
 ## Project Structure
-/console-travel-app
+/console-travel-app <br>
 │ <br>
 ├── main.cpp <br>
 ├── functions.cpp <br>
@@ -65,7 +65,7 @@ Safely terminates the system.
 ## File Format (bookings.txt)
 
 Each booking record is stored on one line seperated by space. <br>
-ID | Name | Phone | Destination | Travelers | TotalCost
+`ID | Name | Phone | Destination | Travelers | TotalCost`
 
 ---
 
