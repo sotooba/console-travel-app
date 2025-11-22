@@ -1,6 +1,6 @@
 #include <iostream>
-
 #include "functions.h"
+
 using namespace std;
 
 int main()
@@ -18,7 +18,7 @@ int main()
 
         if (choice < 1 || choice > 6)
         {
-            errorMessage("Invalid Choice! Enter choice (1-6)");
+            printError("Invalid Choice! Enter choice (1-6)");
         }
         
         else

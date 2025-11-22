@@ -1,6 +1,8 @@
+#include <cctype>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <regex>
 #include <string>
 
 #include "functions.h"
@@ -19,11 +21,14 @@ string packageDestination[] = {"Islamabad",
                             
 int packagesCost[] = {6000, 8000, 6500, 5000, 4000, 6500, 7000, 7500};
 
+// Function to clear the screen, for formatting purpose.
 void clearScreen()
 {
     cout << "\033[2J\033[1;1H";
 }
 
+
+// Function to print the heading
 void printHeader(string prompt)
 {
     cout << "========================================" << endl;
@@ -31,6 +36,8 @@ void printHeader(string prompt)
     cout << "========================================" << endl;
 }
 
+
+// Function to print the main menu
 void printMenu()
 {
     cout << "1. View Travel Packages" << endl;
@@ -42,6 +49,9 @@ void printMenu()
     cout << "----------------------------------------" << endl;
 }
 
+
+// Function to wait for the user to press enter,
+// before clearing screen
 void waitForEnter()
 {
     cout << "Press Enter key to continue: ";
@@ -50,7 +60,8 @@ void waitForEnter()
 }
 
 
-void errorMessage(string prompt)
+// Function to print error message.
+void printError(string prompt)
 {
     cout << prompt << endl;
     cout << "----------------------------------------" << endl;
@@ -60,20 +71,48 @@ void errorMessage(string prompt)
 }
 
 
+// Function to display all available packages.
 void viewPackages()
 {
     printHeader("AVAILABLE TRAVEL PACKAGES");
 
-    cout << left << setw(5) << "ID" << setw(15) << "Destination" << setw(15) << "Cost/Person" << endl;
+    cout << left << setw(5) << "ID" 
+        << setw(15) << "Destination" 
+        << setw(15) << "Cost/Person" << endl;
     cout << "----------------------------------------\n";
 
     for (int i = 0; i < 8; i++){
-        cout << left << setw(5) << i + 1 << setw(15) << packageDestination[i] << "Rs. " << setw(15) << packagesCost[i] << endl;
+        cout << left << setw(5) << i + 1 
+            << setw(15) << packageDestination[i] << "Rs. " 
+            << setw(15) << packagesCost[i] << endl;
     }
     
     cout << "----------------------------------------\n";
 }
 
+
+// Function to validate mobile number.
+string normalizePhone(const string &number)
+{
+    string onlydigits;
+    for(char c : number){
+        if (isdigit(c))
+            onlydigits += c;
+    }
+
+    return onlydigits;
+}
+
+
+// Function to validate mobile number.
+bool isValidNumber(const string &number)
+{
+    regex pattern("^03[0-9]{9}$");
+    return regex_match(number, pattern);
+}
+
+
+// Function to book a package.
 void bookPackage()
 {
     clearScreen();
@@ -85,9 +124,24 @@ void bookPackage()
     cin.ignore();
     getline(cin, b.name);
 
+    b.name[0] = toupper(b.name[0]);
+
     cout << "Enter mobile number: ";
     getline(cin, b.phone);
     cout << endl;
+
+    string cleaned = normalizePhone(b.phone);
+
+    while(!isValidNumber(cleaned)){
+        cout << endl << "Invalid Phone Number! Enter a valid Pakistani number like 03001234567.";
+        cout << endl << "----------------------------------------\n";
+        cout << "Enter mobile number again: ";
+        getline(cin, b.phone);
+        cout << endl;
+        cleaned = normalizePhone(b.phone);
+    }
+
+    b.phone = cleaned;
 
     viewPackages();
     cout << endl;
@@ -99,7 +153,7 @@ void bookPackage()
 
         if (b.package < 1 || b.package > 8)
         {
-            errorMessage("Invalid Choice! Enter choice between 1-8");
+            printError("Invalid Choice! Enter choice between 1-8");
             cout << endl;
         }
 
@@ -109,7 +163,7 @@ void bookPackage()
         cout << "Enter number of Travelers: ";
         cin >> b.travelers;
         if (b.travelers < 1){
-            errorMessage("Travelers can not be less than 1.");
+            printError("Travelers can not be less than 1.");
             cout << endl;
         }
 
@@ -142,23 +196,33 @@ void bookPackage()
     ofstream outfile("bookings.txt", ios::app);
 
     if (!outfile){
-        errorMessage("Error opening file!");
+        printError("Error opening file!");
         return;
     }
 
-    outfile << b.id << " " << b.name << " " << b.phone <<  " " << b.package << " " << b.travelers << " " << b.cost << endl;
+    outfile << b.id << " " 
+            << b.name << " " 
+            << b.phone <<  " " 
+            << b.package << " " 
+            << b.travelers << " " 
+            << b.cost << endl;
 
-    outfile.close();    
+    outfile.close();
+    printReciept(b.id, b.name, b.phone, b.package, b.travelers, b.cost);  
+}
 
+
+// Function to print Successfull booking summary.
+void printReciept(int id, string name, string mobile, int package, int travelers, int cost){
     // Print the summary
     clearScreen();
     cout << "Booking Saved successfully!" << endl;
     printHeader("BOOKING CONFIRMATION");
 
-    cout << left << setw(17) << "Booking ID:" << b.id << endl;
-    cout << left << setw(17) << "Name:" << b.name << endl;
-    cout << left << setw(17) << "Mobile Number:" << b.phone << endl;
-    switch(b.package){
+    cout << left << setw(17) << "Booking ID:" << id << endl;
+    cout << left << setw(17) << "Name:" << name << endl;
+    cout << left << setw(17) << "Mobile Number:" << mobile << endl;
+    switch(package){
         case 1:
             cout << left << setw(17) << "Destination:" << packageDestination[0] << endl;
             break;
@@ -186,8 +250,8 @@ void bookPackage()
         
     }
     
-    cout << left << setw(17) << "Travelers:" << b.travelers << endl;
-    cout << left << setw(17) << "Total Cost:" << b.cost << endl;
+    cout << left << setw(17) << "Travelers:" << travelers << endl;
+    cout << left << setw(17) << "Total Cost:" << "Rs. " << cost << endl;
     cout << "----------------------------------------\n";
 }
 

@@ -14,26 +14,17 @@ struct Booking{
     int cost;
 };
 
-// string packageDestination[] = {"Islamabad", 
-//                                 "Peshawar", 
-//                                 "Faislabad", 
-//                                 "Karachi", 
-//                                 "Gilgit", 
-//                                 "Multan", 
-//                                 "Quetta", 
-//                                 "Lahore"
-//                             };
-
-
-// int packagesCost[] = {6000, 8000, 6500, 5000, 4000, 6500, 7000, 7500};
 
 void clearScreen();
 void printHeader(string prompt);
 void printMenu();
 void waitForEnter();
-void errorMessage(string prompt);
+void printError(string prompt);
 void viewPackages();
 void bookPackage();
+string normalizePhone(const string &number);
+bool isValidNumber(const string &number);
+void printReciept(int id, string name, string mobile, int package, int travelers, int cost);
 
 
 #endif
