@@ -16,6 +16,7 @@ struct Booking{
 };
 
 
+void menuControl(int &choice);
 void clearScreen();
 void printHeader(string prompt);
 void printMenu();

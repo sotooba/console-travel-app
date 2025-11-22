@@ -68,6 +68,44 @@ void printError(string prompt)
     waitForEnter();
 }
 
+void menuControl(int &choice)
+{
+    switch (choice)
+    {
+    case 1:
+        clearScreen();
+        viewPackages();
+        waitForEnter();
+        break;
+
+    case 2:
+        bookPackage();
+        waitForEnter();
+        break;
+
+    case 3:
+        viewBookings();
+        waitForEnter();
+        break;
+
+    case 4:
+        editBookings();
+        waitForEnter();
+        break;
+
+    case 5:
+        deleteBooking();
+        waitForEnter();
+        break;
+    case 6:
+        cout << "Exiting the Program..." << endl;
+        cout << "Thank You!" << endl;
+        cout << "----------------------------------------" << endl;
+        cout << endl;
+        break;
+    }
+}
+
 // Function to display all available packages.
 void viewPackages()
 {
@@ -370,7 +408,6 @@ void printTableHeader()
          << "---------------------------------------------------------------------------------------" << endl;
 }
 
-
 // Function to view all bookings.
 void viewBookings()
 {
@@ -392,7 +429,6 @@ void viewBookings()
         return;
     }
 
-    
     printTableHeader();
 
     for (int i = 0; i < counter; i++)
@@ -415,13 +451,13 @@ void editBookings()
 {
     clearScreen();
     printHeader("EDIT BOOKINGS");
-    
+
     // Array to hold all bookings
     Booking bookings[Maxbookings];
     int counter;
 
     loadBookings(bookings, counter);
-    
+
     if (counter == 0)
     {
         cout << "No bookings found!";
@@ -430,7 +466,7 @@ void editBookings()
         cout << endl;
         return;
     }
-    
+
     string name;
 
     cout << "Enter the EXACT Name on the Booking: ";
@@ -441,7 +477,8 @@ void editBookings()
     int foundCount = 0;
 
     // In case multiple bookings exist with the same name
-    for (int i = 0; i < counter; i++){
+    for (int i = 0; i < counter; i++)
+    {
 
         /*
             If name found in the bookings,
@@ -450,12 +487,14 @@ void editBookings()
 
         */
 
-        if (bookings[i].name == name){
+        if (bookings[i].name == name)
+        {
             foundIndexes[foundCount++] = i;
         }
     }
 
-    if (foundCount == 0){
+    if (foundCount == 0)
+    {
         cout << "No bookings found with that name!";
         cout << endl
              << "----------------------------------------" << endl;
@@ -465,34 +504,39 @@ void editBookings()
 
     int selectIndex = 0;
 
-    if (foundCount > 1){
-        cout << endl << "Multiple bookings found with that name" << endl;
+    if (foundCount > 1)
+    {
+        cout << endl
+             << "Multiple bookings found with that name" << endl;
         cout << "----------------------------------------" << endl;
 
         cout << left << setw(10) << "S.No";
         printTableHeader();
 
-        for (int j = 0; j < foundCount; j++){
+        for (int j = 0; j < foundCount; j++)
+        {
             int index = foundIndexes[j];
 
-             cout << left << setw(10) << (j + 1)
-                          << setw(5) << bookings[index].id
-                          << setw(20) << bookings[index].name
-                          << setw(20) << bookings[index].phone
-                          << setw(15) << bookings[index].destination
-                          << setw(15) << bookings[index].travelers
-                          << setw(10) << bookings[index].cost;
+            cout << left << setw(10) << (j + 1)
+                 << setw(5) << bookings[index].id
+                 << setw(20) << bookings[index].name
+                 << setw(20) << bookings[index].phone
+                 << setw(15) << bookings[index].destination
+                 << setw(15) << bookings[index].travelers
+                 << setw(10) << bookings[index].cost;
 
             cout << endl;
         }
-        
-        cout << endl << "Enter the S.No of the booking you want to edit: ";
+
+        cout << endl
+             << "Enter the S.No of the booking you want to edit: ";
         int choice;
         cin >> choice;
-        
+
         selectIndex = foundIndexes[choice - 1];
     }
-    else{
+    else
+    {
         selectIndex = foundIndexes[0];
     }
 
@@ -500,17 +544,18 @@ void editBookings()
     printTableHeader();
 
     cout << left << setw(5) << bookings[selectIndex].id
-             << setw(20) << bookings[selectIndex].name
-             << setw(20) << bookings[selectIndex].phone
-             << setw(15) << bookings[selectIndex].destination
-             << setw(15) << bookings[selectIndex].travelers
-             << setw(10) << bookings[selectIndex].cost;
+         << setw(20) << bookings[selectIndex].name
+         << setw(20) << bookings[selectIndex].phone
+         << setw(15) << bookings[selectIndex].destination
+         << setw(15) << bookings[selectIndex].travelers
+         << setw(10) << bookings[selectIndex].cost;
 
     cout << endl;
     cout << "----------------------------------------" << endl;
-    
+
     int editChoice;
-    do{
+    do
+    {
         cout << "What do you want to edit? (1-4): " << endl;
         cout << "1. Phone\n";
         cout << "2. Destination\n";
@@ -521,95 +566,110 @@ void editBookings()
         cin >> editChoice;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if (editChoice < 1 || editChoice > 4)
+        {
+            cout << endl
+                 << "Invalid Choice! Enter choice (1-4)" << endl;
+            cout << "----------------------------------------\n";
+            cout << endl;
+        }
+
+    } while (editChoice < 1 || editChoice > 4);
+
+    switch (editChoice)
+    {
+    case 1:
+    {
+        string newPhone;
+        cout << "Enter new phone number: ";
+        getline(cin, newPhone);
+
+        string cleaned = normalizePhone(newPhone);
+
+        while (!isValidNumber(cleaned))
+        {
+            cout << endl
+                 << "Invalid Phone Number! Enter a valid Pakistani number like 03001234567.";
+            cout << endl
+                 << "----------------------------------------\n";
+            cout << "Enter mobile number again: ";
+            getline(cin, newPhone);
+            cout << endl;
+            cleaned = normalizePhone(newPhone);
+        }
+
+        newPhone = cleaned;
+
+        bookings[selectIndex].phone = newPhone;
+        break;
+    }
+    case 2:
+    {
+        string newDestination;
+        bool found = false;
+        int place;
+
+        do
+        {
+            cout << "Enter new destination: ";
+            getline(cin, newDestination);
+            newDestination[0] = toupper(newDestination[0]);
+            for (int k = 0; k < 8; k++)
             {
-                cout << endl << "Invalid Choice! Enter choice (1-4)" << endl;
+                if (newDestination == packageDestination[k])
+                {
+                    found = true;
+                    place = k;
+                }
+            }
+
+            if (found)
+            {
+                bookings[selectIndex].destination = newDestination;
+                bookings[selectIndex].cost = packagesCost[place] * bookings[selectIndex].travelers;
+            }
+            else
+            {
+                cout << endl
+                     << "This detination does not exist in the Package." << endl;
                 cout << "----------------------------------------\n";
                 cout << endl;
             }
-            
-    } while (editChoice < 1 || editChoice > 4);
-
-    switch(editChoice){
-        case 1:{
-            string newPhone;
-            cout << "Enter new phone number: ";
-            getline(cin, newPhone);
-            
-            string cleaned = normalizePhone(newPhone);
-
-            while (!isValidNumber(cleaned))
+        } while (found == false);
+        break;
+    }
+    case 3:
+    {
+        int newTravelers;
+        cout << "Enter new number of travelers: ";
+        cin >> newTravelers;
+        bookings[selectIndex].travelers = newTravelers;
+        string city = bookings[selectIndex].destination;
+        int costIndex;
+        for (int m = 0; m < 8; m++)
+        {
+            if (city == packageDestination[m])
             {
-                cout << endl
-                    << "Invalid Phone Number! Enter a valid Pakistani number like 03001234567.";
-                cout << endl
-                    << "----------------------------------------\n";
-                cout << "Enter mobile number again: ";
-                getline(cin, newPhone);
-                cout << endl;
-                cleaned = normalizePhone(newPhone);
+                costIndex = m;
             }
-
-            newPhone = cleaned;
-            
-            bookings[selectIndex].phone = newPhone;
-            break;
         }
-        case 2:{
-            string newDestination;
-            bool found = false;
-            int place;
-
-            do{
-                cout << "Enter new destination: ";
-                getline(cin, newDestination);
-                newDestination[0] = toupper(newDestination[0]);
-                for (int k = 0; k < 8; k++){
-                    if (newDestination == packageDestination[k]){
-                        found = true;
-                        place = k;
-                    }
-                }
-
-                if (found){
-                    bookings[selectIndex].destination = newDestination;
-                    bookings[selectIndex].cost = packagesCost[place] * bookings[selectIndex].travelers;
-                }
-                else{
-                    cout << endl << "This detination does not exist in the Package." << endl;  
-                    cout << "----------------------------------------\n";
-                    cout << endl;
-                }
-            } while (found == false);
-            break;
-        }
-        case 3:{
-            int newTravelers;
-            cout << "Enter new number of travelers: ";
-            cin >> newTravelers;
-            bookings[selectIndex].travelers = newTravelers;
-            string city = bookings[selectIndex].destination;
-            int costIndex;
-            for (int m = 0; m < 8; m++){
-                if (city == packageDestination[m]){
-                    costIndex = m;
-                }
-            }
-            bookings[selectIndex].cost = packagesCost[costIndex] * newTravelers;
-            break;
-        }
-        case 4:
-            cout << endl << "Edit cancelled!" << endl;
-            cout << "----------------------------------------\n";
-            cout << endl;
-            return;         
+        bookings[selectIndex].cost = packagesCost[costIndex] * newTravelers;
+        break;
+    }
+    case 4:
+        cout << endl
+             << "Edit cancelled!" << endl;
+        cout << "----------------------------------------\n";
+        cout << endl;
+        return;
     }
 
     ofstream outfile("bookings.txt");
-    for (int n = 0; n < counter; n++) {
-        outfile << bookings[n].id << " " 
-                << bookings[n].name << " " 
-                << bookings[n].phone << " " 
-                << bookings[n].destination << " " 
+    for (int n = 0; n < counter; n++)
+    {
+        outfile << bookings[n].id << " "
+                << bookings[n].name << " "
+                << bookings[n].phone << " "
+                << bookings[n].destination << " "
                 << bookings[n].travelers << " "
                 << bookings[n].cost << endl;
     }
@@ -617,7 +677,6 @@ void editBookings()
     cout << "Booking updated successfully!\n";
     cout << "----------------------------------------\n";
 }
-
 
 // Function to delete booking
 void deleteBooking()
@@ -684,7 +743,8 @@ void deleteBooking()
                  << endl;
         }
 
-        cout << endl << "Enter the S.No of the booking to delete: ";
+        cout << endl
+             << "Enter the S.No of the booking to delete: ";
         int choice;
         cin >> choice;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
