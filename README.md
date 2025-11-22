@@ -1,4 +1,4 @@
-# 🌍 Travel Management System (Procedural C++)
+# Travel Management System (Procedural C++)
 
 A menu-driven console application written in **procedural C++** that allows users to manage travel packages and customer bookings using **functions, structs, arrays, and file handling**.
 
