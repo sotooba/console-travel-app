@@ -18,16 +18,20 @@ string packageDestination[] = {"Islamabad",
                                "Quetta",
                                "Lahore"};
 
+
 int packagesCost[] = {6000, 8000, 6500, 5000, 4000, 6500, 7000, 7500};
+
 
 // Maximum number of bookings
 const int Maxbookings = 20;
+
 
 // Function to clear the screen, for formatting purpose.
 void clearScreen()
 {
     cout << "\033[2J\033[1;1H";
 }
+
 
 // Function to print the heading
 void printHeader(string prompt)
@@ -36,6 +40,7 @@ void printHeader(string prompt)
     cout << "\t" << prompt << endl;
     cout << "========================================" << endl;
 }
+
 
 // Function to print the main menu
 void printMenu()
@@ -49,6 +54,7 @@ void printMenu()
     cout << "----------------------------------------" << endl;
 }
 
+
 // Function to wait for the user to press enter,
 // before clearing screen
 void waitForEnter()
@@ -57,6 +63,7 @@ void waitForEnter()
     cin.ignore();
     cin.get();
 }
+
 
 // Function to print error message.
 void printError(string prompt)
@@ -67,6 +74,7 @@ void printError(string prompt)
 
     waitForEnter();
 }
+
 
 void menuControl(int &choice)
 {
@@ -106,6 +114,7 @@ void menuControl(int &choice)
     }
 }
 
+
 // Function to display all available packages.
 void viewPackages()
 {
@@ -126,6 +135,7 @@ void viewPackages()
     cout << "----------------------------------------\n";
 }
 
+
 // Function to validate mobile number.
 string normalizePhone(const string &number)
 {
@@ -139,12 +149,14 @@ string normalizePhone(const string &number)
     return onlydigits;
 }
 
+
 // Function to validate mobile number.
 bool isValidNumber(const string &number)
 {
     regex pattern("^03[0-9]{9}$");
     return regex_match(number, pattern);
 }
+
 
 // Function to book a package.
 void bookPackage()
@@ -256,6 +268,7 @@ void bookPackage()
     printReciept(b.id, b.name, b.phone, b.package, b.travelers, b.cost);
 }
 
+
 // Function to print Successfull booking summary.
 void printReciept(int id, string name, string mobile, int package, int travelers, double cost)
 {
@@ -299,6 +312,7 @@ void printReciept(int id, string name, string mobile, int package, int travelers
     cout << left << setw(17) << "Total Cost:" << "Rs. " << cost << endl;
     cout << "----------------------------------------\n";
 }
+
 
 // Function to load bookings from the file.
 void loadBookings(Booking bookings[], int &counter)
@@ -394,6 +408,7 @@ void loadBookings(Booking bookings[], int &counter)
     infile.close();
 }
 
+
 // Function to print table header.
 void printTableHeader()
 {
@@ -407,6 +422,7 @@ void printTableHeader()
     cout << endl
          << "---------------------------------------------------------------------------------------" << endl;
 }
+
 
 // Function to view all bookings.
 void viewBookings()
@@ -445,6 +461,7 @@ void viewBookings()
 
     cout << endl;
 }
+
 
 // Function to edit bookings
 void editBookings()
@@ -677,6 +694,7 @@ void editBookings()
     cout << "Booking updated successfully!\n";
     cout << "----------------------------------------\n";
 }
+
 
 // Function to delete booking
 void deleteBooking()
