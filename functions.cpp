@@ -434,7 +434,7 @@ void editBookings()
     string name;
 
     cout << "Enter the EXACT Name on the Booking: ";
-    cin.ignore();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin, name);
     name[0] = toupper(name[0]);
     int foundIndexes[Maxbookings];
@@ -469,13 +469,13 @@ void editBookings()
         cout << endl << "Multiple bookings found with that name" << endl;
         cout << "----------------------------------------" << endl;
 
-        cout << left << setw(5) << "S.No";
+        cout << left << setw(10) << "S.No";
         printTableHeader();
 
         for (int j = 0; j < foundCount; j++){
             int index = foundIndexes[j];
 
-             cout << left << setw(5) << (j + 1) << "."
+             cout << left << setw(10) << (j + 1)
                           << setw(5) << bookings[index].id
                           << setw(20) << bookings[index].name
                           << setw(20) << bookings[index].phone
@@ -486,7 +486,7 @@ void editBookings()
             cout << endl;
         }
         
-        cout << "Enter the S.No of the booking you want to edit: ";
+        cout << endl << "Enter the S.No of the booking you want to edit: ";
         int choice;
         cin >> choice;
         
@@ -519,7 +519,7 @@ void editBookings()
         cout << "Enter your choice: ";
 
         cin >> editChoice;
-        cin.ignore();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if (editChoice < 1 || editChoice > 4)
             {
                 cout << endl << "Invalid Choice! Enter choice (1-4)" << endl;
@@ -562,7 +562,7 @@ void editBookings()
             do{
                 cout << "Enter new destination: ";
                 getline(cin, newDestination);
-                
+                newDestination[0] = toupper(newDestination[0]);
                 for (int k = 0; k < 8; k++){
                     if (newDestination == packageDestination[k]){
                         found = true;
@@ -615,5 +615,121 @@ void editBookings()
     }
     outfile.close();
     cout << "Booking updated successfully!\n";
+    cout << "----------------------------------------\n";
+}
+
+
+// Function to delete booking
+void deleteBooking()
+{
+    clearScreen();
+    printHeader("DELETE BOOKING");
+
+    Booking bookings[Maxbookings];
+    int counter;
+
+    loadBookings(bookings, counter);
+
+    if (counter == 0)
+    {
+        cout << "No bookings found!\n";
+        cout << "----------------------------------------\n\n";
+        return;
+    }
+
+    string name;
+    cout << "Enter the EXACT Name on the Booking: ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, name);
+    name[0] = toupper(name[0]);
+
+    int foundIndexes[Maxbookings];
+    int foundCount = 0;
+
+    for (int i = 0; i < counter; i++)
+    {
+        if (bookings[i].name == name)
+        {
+            foundIndexes[foundCount++] = i;
+        }
+    }
+
+    if (foundCount == 0)
+    {
+        cout << "No bookings found with that name!\n";
+        cout << "----------------------------------------\n\n";
+        return;
+    }
+
+    int selectIndex = 0;
+
+    if (foundCount > 1)
+    {
+        cout << "\nMultiple bookings found with that name:\n";
+        cout << "----------------------------------------\n";
+
+        cout << left << setw(10) << "S.No";
+        printTableHeader();
+
+        for (int j = 0; j < foundCount; j++)
+        {
+            int idx = foundIndexes[j];
+            cout << left << setw(10) << (j + 1)
+                 << setw(5) << bookings[idx].id
+                 << setw(20) << bookings[idx].name
+                 << setw(20) << bookings[idx].phone
+                 << setw(15) << bookings[idx].destination
+                 << setw(15) << bookings[idx].travelers
+                 << setw(10) << bookings[idx].cost
+                 << endl;
+        }
+
+        cout << endl << "Enter the S.No of the booking to delete: ";
+        int choice;
+        cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        selectIndex = foundIndexes[choice - 1];
+    }
+    else
+    {
+        selectIndex = foundIndexes[0];
+    }
+
+    // Confirm deletion
+    char confirm;
+    cout << "\nAre you sure you want to delete this booking? (Y/N): ";
+    cin >> confirm;
+
+    if (toupper(confirm) != 'Y')
+    {
+        cout << "\nDelete cancelled!\n";
+        cout << "----------------------------------------\n";
+        return;
+    }
+
+    // Shift left
+    for (int i = selectIndex; i < counter - 1; i++)
+    {
+        bookings[i] = bookings[i + 1];
+    }
+
+    counter--;
+
+    // Save updated bookings back to file
+    ofstream outfile("bookings.txt");
+
+    for (int i = 0; i < counter; i++)
+    {
+        outfile << bookings[i].id << " "
+                << bookings[i].name << " "
+                << bookings[i].phone << " "
+                << bookings[i].destination << " "
+                << bookings[i].travelers << " "
+                << bookings[i].cost << endl;
+    }
+    outfile.close();
+
+    cout << "\nBooking deleted successfully!\n";
     cout << "----------------------------------------\n";
 }

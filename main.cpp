@@ -47,11 +47,12 @@ int main()
                 break;
 
             case 5:
-                cout << "five" << endl;
+                deleteBooking();
                 waitForEnter();
                 break;
             case 6:
                 cout << "Exiting the Program..." << endl;
+                cout << "Thank You!" << endl;
                 cout << "----------------------------------------" << endl;
                 cout << endl;
                 break;

@@ -30,6 +30,6 @@ void printTableHeader();
 void loadBookings(Booking bookings[], int &counter);
 void viewBookings();
 void editBookings();
-
+void deleteBooking();
 
 #endif
