@@ -19,11 +19,11 @@ This project aims to create a **Travel Management System** that enables users to
 
 ## Project Structure
 /console-travel-app
-│
-├── main.cpp
-├── functions.cpp
-├── functions.h
-└── bookings.txt
+│ <br>
+├── main.cpp <br>
+├── functions.cpp <br>
+├── functions.h <br>
+└── bookings.txt <br>
 
 `bookings.txt` is automatically created if it does not exist.
 
@@ -44,11 +44,10 @@ Shows available travel destinations and prices per person.
 - Record is saved to file  
 
 ### View All Bookings
-Displays all stored bookings from memory.
+Displays all stored bookings from file.
 
 ### Edit a Booking
-Allows editing of:
-- Name  
+Allows editing of: 
 - Phone  
 - Destination  
 - Number of travelers  
@@ -56,7 +55,7 @@ Allows editing of:
 Cost is recalculated when needed.
 
 ### Delete a Booking
-Deletes a booking by ID and updates the file.
+Deletes a booking by Name and updates the file.
 
 ### Exit Program
 Safely terminates the system.
@@ -65,14 +64,15 @@ Safely terminates the system.
 
 ## File Format (bookings.txt)
 
-Each booking record is stored on one line:
+Each booking record is stored on one line seperated by space. <br>
+ID | Name | Phone | Destination | Travelers | TotalCost
 
 ---
 
 ## How to Compile & Run
 
 ### Using g++:
-g++ main.cpp functions.cpp -o app.exe
+g++ main.cpp functions.cpp -o app.exe <br>
 ./app.exe
 
 ### Using CodeBlocks / Dev-C++:
@@ -89,3 +89,4 @@ g++ main.cpp functions.cpp -o app.exe
 - Add admin authentication  
 
 ---
+Any type of valuebale contributions or modifications are welcomed.
