@@ -26,6 +26,10 @@ void bookPackage();
 string normalizePhone(const string &number);
 bool isValidNumber(const string &number);
 void printReciept(int id, string name, string mobile, int package, int travelers, double cost);
+void printTableHeader();
+void loadBookings(Booking bookings[], int &counter);
 void viewBookings();
+void editBookings();
+
 
 #endif

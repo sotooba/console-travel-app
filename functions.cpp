@@ -9,17 +9,15 @@
 #include "functions.h"
 using namespace std;
 
-string packageDestination[] = {"Islamabad", 
-                                "Peshawar", 
-                                "Faislabad", 
-                                "Karachi", 
-                                "Gilgit", 
-                                "Multan", 
-                                "Quetta", 
-                                "Lahore"
-                            };
+string packageDestination[] = {"Islamabad",
+                               "Peshawar",
+                               "Faislabad",
+                               "Karachi",
+                               "Gilgit",
+                               "Multan",
+                               "Quetta",
+                               "Lahore"};
 
-                            
 int packagesCost[] = {6000, 8000, 6500, 5000, 4000, 6500, 7000, 7500};
 
 // Maximum number of bookings
@@ -31,7 +29,6 @@ void clearScreen()
     cout << "\033[2J\033[1;1H";
 }
 
-
 // Function to print the heading
 void printHeader(string prompt)
 {
@@ -39,7 +36,6 @@ void printHeader(string prompt)
     cout << "\t" << prompt << endl;
     cout << "========================================" << endl;
 }
-
 
 // Function to print the main menu
 void printMenu()
@@ -53,7 +49,6 @@ void printMenu()
     cout << "----------------------------------------" << endl;
 }
 
-
 // Function to wait for the user to press enter,
 // before clearing screen
 void waitForEnter()
@@ -62,7 +57,6 @@ void waitForEnter()
     cin.ignore();
     cin.get();
 }
-
 
 // Function to print error message.
 void printError(string prompt)
@@ -74,32 +68,32 @@ void printError(string prompt)
     waitForEnter();
 }
 
-
 // Function to display all available packages.
 void viewPackages()
 {
     printHeader("AVAILABLE TRAVEL PACKAGES");
 
-    cout << left << setw(5) << "ID" 
-        << setw(15) << "Destination" 
-        << setw(15) << "Cost/Person" << endl;
+    cout << left << setw(5) << "ID"
+         << setw(15) << "Destination"
+         << setw(15) << "Cost/Person" << endl;
     cout << "----------------------------------------\n";
 
-    for (int i = 0; i < 8; i++){
-        cout << left << setw(5) << i + 1 
-            << setw(15) << packageDestination[i] << "Rs. " 
-            << setw(15) << packagesCost[i] << endl;
+    for (int i = 0; i < 8; i++)
+    {
+        cout << left << setw(5) << i + 1
+             << setw(15) << packageDestination[i] << "Rs. "
+             << setw(15) << packagesCost[i] << endl;
     }
-    
+
     cout << "----------------------------------------\n";
 }
-
 
 // Function to validate mobile number.
 string normalizePhone(const string &number)
 {
     string onlydigits;
-    for(char c : number){
+    for (char c : number)
+    {
         if (isdigit(c))
             onlydigits += c;
     }
@@ -107,14 +101,12 @@ string normalizePhone(const string &number)
     return onlydigits;
 }
 
-
 // Function to validate mobile number.
 bool isValidNumber(const string &number)
 {
     regex pattern("^03[0-9]{9}$");
     return regex_match(number, pattern);
 }
-
 
 // Function to book a package.
 void bookPackage()
@@ -136,9 +128,12 @@ void bookPackage()
 
     string cleaned = normalizePhone(b.phone);
 
-    while(!isValidNumber(cleaned)){
-        cout << endl << "Invalid Phone Number! Enter a valid Pakistani number like 03001234567.";
-        cout << endl << "----------------------------------------\n";
+    while (!isValidNumber(cleaned))
+    {
+        cout << endl
+             << "Invalid Phone Number! Enter a valid Pakistani number like 03001234567.";
+        cout << endl
+             << "----------------------------------------\n";
         cout << "Enter mobile number again: ";
         getline(cin, b.phone);
         cout << endl;
@@ -163,10 +158,12 @@ void bookPackage()
 
     } while (b.package < 1 || b.package > 8);
 
-    do{
+    do
+    {
         cout << "Enter number of Travelers: ";
         cin >> b.travelers;
-        if (b.travelers < 1){
+        if (b.travelers < 1)
+        {
             printError("Travelers can not be less than 1.");
             cout << endl;
         }
@@ -180,16 +177,19 @@ void bookPackage()
     // Open the file in read mode
     ifstream infile("bookings.txt");
 
-    if (!infile){
+    if (!infile)
+    {
         last_id = 0;
     }
-    else{
-       int id;
-       string temp_discard;
-       while(infile >> id){
+    else
+    {
+        int id;
+        string temp_discard;
+        while (infile >> id)
+        {
             last_id = id;
             getline(infile, temp_discard);
-       }
+        }
         infile.close();
     }
 
@@ -199,25 +199,28 @@ void bookPackage()
     // Save Bookings
     ofstream outfile("bookings.txt", ios::app);
 
-    if (!outfile){
+    if (!outfile)
+    {
         printError("Error opening file!");
         return;
     }
 
-    outfile << b.id << " " 
-            << b.name << " " 
-            << b.phone <<  " " 
-            << b.package << " " 
-            << b.travelers << " " 
+    int index = b.package;
+
+    outfile << b.id << " "
+            << b.name << " "
+            << b.phone << " "
+            << packageDestination[index - 1] << " "
+            << b.travelers << " "
             << b.cost << endl;
 
     outfile.close();
-    printReciept(b.id, b.name, b.phone, b.package, b.travelers, b.cost);  
+    printReciept(b.id, b.name, b.phone, b.package, b.travelers, b.cost);
 }
 
-
 // Function to print Successfull booking summary.
-void printReciept(int id, string name, string mobile, int package, int travelers, double cost){
+void printReciept(int id, string name, string mobile, int package, int travelers, double cost)
+{
     // Print the summary
     clearScreen();
     cout << "Booking Saved successfully!" << endl;
@@ -226,67 +229,62 @@ void printReciept(int id, string name, string mobile, int package, int travelers
     cout << left << setw(17) << "Booking ID:" << id << endl;
     cout << left << setw(17) << "Name:" << name << endl;
     cout << left << setw(17) << "Mobile Number:" << mobile << endl;
-    switch(package){
-        case 1:
-            cout << left << setw(17) << "Destination:" << packageDestination[0] << endl;
-            break;
-        case 2:
-            cout << left << setw(17) << "Destination:" << packageDestination[1] << endl;
-            break;
-        case 3:
-            cout << left << setw(17) << "Destination:" << packageDestination[2] << endl;
-            break;
-        case 4:
-            cout << left << setw(17) << "Destination:" << packageDestination[3] << endl;
-            break;
-        case 5:
-            cout << left << setw(17) << "Destination:" << packageDestination[4] << endl;
-            break;
-        case 6:
-            cout << left << setw(17) << "Destination:" << packageDestination[5] << endl;
-            break;
-        case 7:
-            cout << left << setw(17) << "Destination:" << packageDestination[6] << endl;
-            break;
-        case 8:
-            cout << left << setw(17) << "Destination:" << packageDestination[7] << endl;
-            break;
-        
+    switch (package)
+    {
+    case 1:
+        cout << left << setw(17) << "Destination:" << packageDestination[0] << endl;
+        break;
+    case 2:
+        cout << left << setw(17) << "Destination:" << packageDestination[1] << endl;
+        break;
+    case 3:
+        cout << left << setw(17) << "Destination:" << packageDestination[2] << endl;
+        break;
+    case 4:
+        cout << left << setw(17) << "Destination:" << packageDestination[3] << endl;
+        break;
+    case 5:
+        cout << left << setw(17) << "Destination:" << packageDestination[4] << endl;
+        break;
+    case 6:
+        cout << left << setw(17) << "Destination:" << packageDestination[5] << endl;
+        break;
+    case 7:
+        cout << left << setw(17) << "Destination:" << packageDestination[6] << endl;
+        break;
+    case 8:
+        cout << left << setw(17) << "Destination:" << packageDestination[7] << endl;
+        break;
     }
-    
+
     cout << left << setw(17) << "Travelers:" << travelers << endl;
     cout << left << setw(17) << "Total Cost:" << "Rs. " << cost << endl;
     cout << "----------------------------------------\n";
 }
 
-
-// Function to view all bookings.
-void viewBookings()
+// Function to load bookings from the file.
+void loadBookings(Booking bookings[], int &counter)
 {
-    clearScreen();
-    printHeader("ALL BOOKINGS");
-
     ifstream infile("bookings.txt");
+    counter = 0;
 
-    if (!infile){
+    if (!infile)
+    {
         printError("Error opening file!");
         return;
     }
-
-    // Array to hold all bookings
-    Booking bookings[Maxbookings];
-    int counter = 0;
     string line;
 
     // Read each line untill end of the file
 
-    /* 
+    /*
         Reading line by line using getline(),
         because name can have space between first & last name.
     */
 
-    while(getline(infile, line) && counter < Maxbookings){
-        
+    while (getline(infile, line) && counter < Maxbookings)
+    {
+
         /*
             After reading a line,
             next step is to parse the line into tokens
@@ -302,16 +300,17 @@ void viewBookings()
         // Variables to parse the tokens from the line
         int id, travelers;
         double cost;
-        string word;         // temporary string variable
-        string name = "";   // will hold full name
-        string phone;       // will hold mobile number
+        string word;      // temporary string variable
+        string name = ""; // will hold full name
+        string phone;     // will hold mobile number
         string destination;
 
         // Since ID is just a single number, read id.
         iss >> id;
 
         // Read name
-        while(iss >> word){
+        while (iss >> word)
+        {
 
             /*
                 After readin id, the next token to read is name.
@@ -326,12 +325,14 @@ void viewBookings()
 
             */
 
-            if(isdigit(word[0])){
+            if (isdigit(word[0]))
+            {
                 phone = word;
                 break;
             }
-            else{
-                if(!name.empty())
+            else
+            {
+                if (!name.empty())
                     name += " ";
                 name += word;
             }
@@ -353,33 +354,266 @@ void viewBookings()
     }
 
     infile.close();
+}
 
-    if (counter == 0){
+// Function to print table header.
+void printTableHeader()
+{
+    cout << left << setw(5) << "ID"
+         << setw(20) << "Name"
+         << setw(20) << "Mobile No."
+         << setw(15) << "Destination"
+         << setw(15) << "Travelers"
+         << setw(10) << "Total Cost";
+
+    cout << endl
+         << "---------------------------------------------------------------------------------------" << endl;
+}
+
+
+// Function to view all bookings.
+void viewBookings()
+{
+    clearScreen();
+    printHeader("ALL BOOKINGS");
+
+    // Array to hold all bookings
+    Booking bookings[Maxbookings];
+    int counter;
+
+    loadBookings(bookings, counter);
+
+    if (counter == 0)
+    {
         cout << "No bookings found!";
-        cout << endl << "----------------------------------------" << endl;
+        cout << endl
+             << "----------------------------------------" << endl;
         cout << endl;
         return;
     }
 
-    cout << left << setw(5) << "ID" 
-         << setw(20) << "Name" 
-         << setw(20) <<"Mobile No." 
-         << setw(15) << "Destination"
-         << setw(15) << "Travelers"
-         << setw(10) << "Total Cost";
     
-    cout << endl << "---------------------------------------------------------------------------------------" << endl;
+    printTableHeader();
 
-    for (int i = 0; i < counter; i++){
+    for (int i = 0; i < counter; i++)
+    {
         cout << left << setw(5) << bookings[i].id
              << setw(20) << bookings[i].name
              << setw(20) << bookings[i].phone
              << setw(15) << bookings[i].destination
              << setw(15) << bookings[i].travelers
              << setw(10) << bookings[i].cost;
-        
+
         cout << endl;
     }
-    
+
     cout << endl;
+}
+
+// Function to edit bookings
+void editBookings()
+{
+    clearScreen();
+    printHeader("EDIT BOOKINGS");
+    
+    // Array to hold all bookings
+    Booking bookings[Maxbookings];
+    int counter;
+
+    loadBookings(bookings, counter);
+    
+    if (counter == 0)
+    {
+        cout << "No bookings found!";
+        cout << endl
+             << "----------------------------------------" << endl;
+        cout << endl;
+        return;
+    }
+    
+    string name;
+
+    cout << "Enter the EXACT Name on the Booking: ";
+    cin.ignore();
+    getline(cin, name);
+    name[0] = toupper(name[0]);
+    int foundIndexes[Maxbookings];
+    int foundCount = 0;
+
+    // In case multiple bookings exist with the same name
+    for (int i = 0; i < counter; i++){
+
+        /*
+            If name found in the bookings,
+                1. Store the index at which the name is found
+                2. Store the number of times that name appears
+
+        */
+
+        if (bookings[i].name == name){
+            foundIndexes[foundCount++] = i;
+        }
+    }
+
+    if (foundCount == 0){
+        cout << "No bookings found with that name!";
+        cout << endl
+             << "----------------------------------------" << endl;
+        cout << endl;
+        return;
+    }
+
+    int selectIndex = 0;
+
+    if (foundCount > 1){
+        cout << endl << "Multiple bookings found with that name" << endl;
+        cout << "----------------------------------------" << endl;
+
+        cout << left << setw(5) << "S.No";
+        printTableHeader();
+
+        for (int j = 0; j < foundCount; j++){
+            int index = foundIndexes[j];
+
+             cout << left << setw(5) << (j + 1) << "."
+                          << setw(5) << bookings[index].id
+                          << setw(20) << bookings[index].name
+                          << setw(20) << bookings[index].phone
+                          << setw(15) << bookings[index].destination
+                          << setw(15) << bookings[index].travelers
+                          << setw(10) << bookings[index].cost;
+
+            cout << endl;
+        }
+        
+        cout << "Enter the S.No of the booking you want to edit: ";
+        int choice;
+        cin >> choice;
+        
+        selectIndex = foundIndexes[choice - 1];
+    }
+    else{
+        selectIndex = foundIndexes[0];
+    }
+
+    clearScreen();
+    printTableHeader();
+
+    cout << left << setw(5) << bookings[selectIndex].id
+             << setw(20) << bookings[selectIndex].name
+             << setw(20) << bookings[selectIndex].phone
+             << setw(15) << bookings[selectIndex].destination
+             << setw(15) << bookings[selectIndex].travelers
+             << setw(10) << bookings[selectIndex].cost;
+
+    cout << endl;
+    cout << "----------------------------------------" << endl;
+    
+    int editChoice;
+    do{
+        cout << "What do you want to edit? (1-4): " << endl;
+        cout << "1. Phone\n";
+        cout << "2. Destination\n";
+        cout << "3. Number of Travelers\n";
+        cout << "4. Cancel\n";
+        cout << "Enter your choice: ";
+
+        cin >> editChoice;
+        cin.ignore();
+        if (editChoice < 1 || editChoice > 4)
+            {
+                cout << endl << "Invalid Choice! Enter choice (1-4)" << endl;
+                cout << "----------------------------------------\n";
+                cout << endl;
+            }
+            
+    } while (editChoice < 1 || editChoice > 4);
+
+    switch(editChoice){
+        case 1:{
+            string newPhone;
+            cout << "Enter new phone number: ";
+            getline(cin, newPhone);
+            
+            string cleaned = normalizePhone(newPhone);
+
+            while (!isValidNumber(cleaned))
+            {
+                cout << endl
+                    << "Invalid Phone Number! Enter a valid Pakistani number like 03001234567.";
+                cout << endl
+                    << "----------------------------------------\n";
+                cout << "Enter mobile number again: ";
+                getline(cin, newPhone);
+                cout << endl;
+                cleaned = normalizePhone(newPhone);
+            }
+
+            newPhone = cleaned;
+            
+            bookings[selectIndex].phone = newPhone;
+            break;
+        }
+        case 2:{
+            string newDestination;
+            bool found = false;
+            int place;
+
+            do{
+                cout << "Enter new destination: ";
+                getline(cin, newDestination);
+                
+                for (int k = 0; k < 8; k++){
+                    if (newDestination == packageDestination[k]){
+                        found = true;
+                        place = k;
+                    }
+                }
+
+                if (found){
+                    bookings[selectIndex].destination = newDestination;
+                    bookings[selectIndex].cost = packagesCost[place] * bookings[selectIndex].travelers;
+                }
+                else{
+                    cout << endl << "This detination does not exist in the Package." << endl;  
+                    cout << "----------------------------------------\n";
+                    cout << endl;
+                }
+            } while (found == false);
+            break;
+        }
+        case 3:{
+            int newTravelers;
+            cout << "Enter new number of travelers: ";
+            cin >> newTravelers;
+            bookings[selectIndex].travelers = newTravelers;
+            string city = bookings[selectIndex].destination;
+            int costIndex;
+            for (int m = 0; m < 8; m++){
+                if (city == packageDestination[m]){
+                    costIndex = m;
+                }
+            }
+            bookings[selectIndex].cost = packagesCost[costIndex] * newTravelers;
+            break;
+        }
+        case 4:
+            cout << endl << "Edit cancelled!" << endl;
+            cout << "----------------------------------------\n";
+            cout << endl;
+            return;         
+    }
+
+    ofstream outfile("bookings.txt");
+    for (int n = 0; n < counter; n++) {
+        outfile << bookings[n].id << " " 
+                << bookings[n].name << " " 
+                << bookings[n].phone << " " 
+                << bookings[n].destination << " " 
+                << bookings[n].travelers << " "
+                << bookings[n].cost << endl;
+    }
+    outfile.close();
+    cout << "Booking updated successfully!\n";
+    cout << "----------------------------------------\n";
 }

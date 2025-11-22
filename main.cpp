@@ -42,7 +42,7 @@ int main()
                 break;
 
             case 4:
-                cout << "four" << endl;
+                editBookings();
                 waitForEnter();
                 break;
 
