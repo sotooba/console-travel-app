@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <iostream>
 #include <regex>
+#include <sstream>
 #include <string>
 
 #include "functions.h"
@@ -20,6 +21,9 @@ string packageDestination[] = {"Islamabad",
 
                             
 int packagesCost[] = {6000, 8000, 6500, 5000, 4000, 6500, 7000, 7500};
+
+// Maximum number of bookings
+const int Maxbookings = 20;
 
 // Function to clear the screen, for formatting purpose.
 void clearScreen()
@@ -213,7 +217,7 @@ void bookPackage()
 
 
 // Function to print Successfull booking summary.
-void printReciept(int id, string name, string mobile, int package, int travelers, int cost){
+void printReciept(int id, string name, string mobile, int package, int travelers, double cost){
     // Print the summary
     clearScreen();
     cout << "Booking Saved successfully!" << endl;
@@ -255,4 +259,127 @@ void printReciept(int id, string name, string mobile, int package, int travelers
     cout << "----------------------------------------\n";
 }
 
+
+// Function to view all bookings.
+void viewBookings()
+{
+    clearScreen();
+    printHeader("ALL BOOKINGS");
+
+    ifstream infile("bookings.txt");
+
+    if (!infile){
+        printError("Error opening file!");
+        return;
+    }
+
+    // Array to hold all bookings
+    Booking bookings[Maxbookings];
+    int counter = 0;
+    string line;
+
+    // Read each line untill end of the file
+
+    /* 
+        Reading line by line using getline(),
+        because name can have space between first & last name.
+    */
+
+    while(getline(infile, line) && counter < Maxbookings){
+        
+        /*
+            After reading a line,
+            next step is to parse the line into tokens
+            e.g. id, name, phone, destination, travelers, cost.
+
+            In order to do so,
+            using string stream, so iss can read the line just like cin.
+            iss is the string stream, created from a line in a file.
+        */
+
+        istringstream iss(line);
+
+        // Variables to parse the tokens from the line
+        int id, travelers;
+        double cost;
+        string word;         // temporary string variable
+        string name = "";   // will hold full name
+        string phone;       // will hold mobile number
+        string destination;
+
+        // Since ID is just a single number, read id.
+        iss >> id;
+
+        // Read name
+        while(iss >> word){
+
+            /*
+                After readin id, the next token to read is name.
+                Name can have spaces.
+                Loop through the line and read each token until phone number.
+
+                | Iteration | 'word'     | `isdigit(word[0])`? | `name`              | `phone`           | Action                                                   |
+                | --------- | ---------- | ------------------- | ------------------- | ----------------- | -------------------------------------------------------- |
+                | 1         | John       | false               | "" → "John"         | ""                | Append "John" to `name`                                  |
+                | 2         | Doe        | false               | "John" → "John Doe" | ""                | Append "Doe" to `name`                                   |
+                | 3         | 123456789  | true                | "John Doe"          | "" → "123456789"  | Detected phone number → assign to `phone` and break loop |
+
+            */
+
+            if(isdigit(word[0])){
+                phone = word;
+                break;
+            }
+            else{
+                if(!name.empty())
+                    name += " ";
+                name += word;
+            }
+        }
+
+        // Read destination, travlers, cost
+        iss >> destination >> travelers >> cost;
+
+        // Store data in an array
+        bookings[counter].id = id;
+        bookings[counter].name = name;
+        bookings[counter].phone = phone;
+        bookings[counter].destination = destination;
+        bookings[counter].travelers = travelers;
+        bookings[counter].cost = cost;
+
+        // Increase the counter
+        counter++;
+    }
+
+    infile.close();
+
+    if (counter == 0){
+        cout << "No bookings found!";
+        cout << endl << "----------------------------------------" << endl;
+        cout << endl;
+        return;
+    }
+
+    cout << left << setw(5) << "ID" 
+         << setw(20) << "Name" 
+         << setw(20) <<"Mobile No." 
+         << setw(15) << "Destination"
+         << setw(15) << "Travelers"
+         << setw(10) << "Total Cost";
     
+    cout << endl << "---------------------------------------------------------------------------------------" << endl;
+
+    for (int i = 0; i < counter; i++){
+        cout << left << setw(5) << bookings[i].id
+             << setw(20) << bookings[i].name
+             << setw(20) << bookings[i].phone
+             << setw(15) << bookings[i].destination
+             << setw(15) << bookings[i].travelers
+             << setw(10) << bookings[i].cost;
+        
+        cout << endl;
+    }
+    
+    cout << endl;
+}

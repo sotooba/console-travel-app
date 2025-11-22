@@ -9,9 +9,10 @@ struct Booking{
     int id;
     string name;
     string phone;
+    string destination;
     int package;
     int travelers;
-    int cost;
+    double cost;
 };
 
 
@@ -24,7 +25,7 @@ void viewPackages();
 void bookPackage();
 string normalizePhone(const string &number);
 bool isValidNumber(const string &number);
-void printReciept(int id, string name, string mobile, int package, int travelers, int cost);
-
+void printReciept(int id, string name, string mobile, int package, int travelers, double cost);
+void viewBookings();
 
 #endif

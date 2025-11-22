@@ -37,7 +37,7 @@ int main()
                 break;
 
             case 3:
-                cout << "three" << endl;
+                viewBookings();
                 waitForEnter();
                 break;
 
