@@ -647,7 +647,7 @@ void editBookings()
             else
             {
                 cout << endl
-                     << "This detination does not exist in the Package." << endl;
+                     << "This detination does not exist in any Package." << endl;
                 cout << "----------------------------------------\n";
                 cout << endl;
             }
