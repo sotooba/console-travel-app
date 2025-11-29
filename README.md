@@ -19,7 +19,6 @@ This project aims to create a **Travel Management System** that enables users to
 
 ## Project Structure
 /console-travel-app <br>
-│ <br>
 ├── main.cpp <br>
 ├── functions.cpp <br>
 ├── functions.h <br>
